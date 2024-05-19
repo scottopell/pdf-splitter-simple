@@ -1,4 +1,4 @@
-import init, { PdfProcessor } from '../pkg/pdf_splitter_simple.js';
+import init, { PdfProcessor, create_smiley_face_png } from '../pkg/pdf_splitter_simple.js';
 
 async function run() {
     await init();
@@ -16,8 +16,20 @@ async function run() {
             }
         }
     });
+    let smiley_input = document.getElementById('smiley-input');
+    console.log("hello world smiley input", smiley_input);
+    smiley_input.addEventListener('change', async () => {
+        const mouth_char = smiley_input.value;
+        console.log(`Change and mouth_char is ${mouth_char}`);
+
+        displayMouthChar(create_smiley_face_png(mouth_char));
+    });
 }
 
+function displayMouthChar(smiley) {
+    let output = document.getElementById("output-smiley");
+    output.innerHTML = `<img src="data:image/png;base64,${smiley}" alt="Smiley face with mouth as a text character" />`;
+}
 function displayMetadata(metadata) {
     const metadataObj = JSON.parse(metadata);
     const output = document.getElementById('output');

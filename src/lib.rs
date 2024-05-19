@@ -14,7 +14,9 @@ use std::io::Cursor;
 use image::{ImageBuffer, ImageFormat, Rgba};
 use imageproc::drawing::{draw_filled_circle_mut, draw_filled_rect_mut, draw_hollow_rect_mut};
 
-fn create_smiley_face_png(mouth_char: char) -> String {
+#[wasm_bindgen]
+pub fn create_smiley_face_png(mouth_char: char) -> Base64Png {
+    let mouth_char = mouth_char.to_ascii_uppercase();
     let width = 100;
     let height = 100;
     let mut img = ImageBuffer::new(width, height);
@@ -194,12 +196,14 @@ fn create_smiley_face_png(mouth_char: char) -> String {
 #[wasm_bindgen]
 pub struct PdfProcessor;
 
+type Base64Png = String;
+
 #[derive(Serialize, Deserialize)]
 struct PdfMetadata {
     title: String,
     num_pages: u32,
     num_bytes: u32,
-    images: Vec<String>, // Base64 encoded images
+    images: Vec<Base64Png>,
 }
 
 fn process_pdf_impl(pdf_data: Uint8Array) -> Result<PdfMetadata, Error> {
